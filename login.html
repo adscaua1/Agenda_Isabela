@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <h1>📅 Agenda</h1>
+
+  <div id="loginBox">
+    <input type="password" id="senha" placeholder="Senha">
+    <button id="entrar">Entrar</button>
+  </div>
+
+  <div id="painel" style="display:none;">
+    <input type="date" id="data">
+    <div id="agenda"></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+
+    <h3 id="modalHora"></h3>
+    <p id="modalInfo"></p>
+
+    <button id="btnWhats" class="btn verde">📲 Confirmar</button>
+    <button id="btnCancelar" class="btn vermelho">❌ Cancelar</button>
+    <button id="btnBloquear" class="btn cinza">🔒 Bloquear</button>
+
+  </div>
+</div>
+
+<script type="module" src="./js/login.js"></script>
+</body>
+</html>

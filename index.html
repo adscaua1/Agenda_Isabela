@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <h1>💈 Barbearia</h1>
+
+        <div class="card">
+            <input type="text" id="nome" placeholder="Seu nome">
+            <input type="tel" id="telefone" placeholder="Telefone">
+        </div>
+
+        <div class="card">
+            <label>📅 Escolha a data</label>
+            <input type="date" id="data">
+        </div>
+
+        <div class="card">
+            <h3>✂️ Serviços</h3>
+
+            <div id="servicos">
+
+                <div class="card-servico" data-servico="Corte">
+                    <img src="img/corte.jpg">
+                    <p>Corte - R$30</p>
+                </div>
+
+                <div class="card-servico" data-servico="Barba">
+                    <img src="img/barba.jpg">
+                    <p>Barba - R$20</p>
+                </div>
+
+                <div class="card-servico" data-servico="Combo">
+                    <img src="img/combo.jpg">
+                    <p>Combo - R$50</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⏰ Horários</h3>
+            <div id="horarios"></div>
+        </div>
+
+        <h2>📋 Meus Agendamentos</h2>
+        <div id="historico"></div>
+
+        <div id="banner" class="banner"></div>
+
+        <button id="agendar">Agendar</button>
+
+    </div>
+
+    <script type="module" src="./js/script.js"></script>
+</body>
+
+</html>
