@@ -20,7 +20,7 @@ let horarioSelecionado = null;
 let servicoSelecionado = null;
 let ocupados = [];
 
-// 💖 SEU NÚMERO
+// 💖 SEU NÚMERO (SEM ESPAÇO / SEM TRAÇO)
 const numeroDono = "5512988070269";
 
 // inputs
@@ -103,19 +103,19 @@ async function renderizar(data) {
     });
 }
 
-// 🔥 AGENDAR
+// 🔥 AGENDAR COM WHATSAPP DIRETO
 document.getElementById("agendar").onclick = async () => {
     const nome = nomeInput.value;
     const tel = telInput.value;
     const data = document.getElementById("data").value;
 
     if (!nome || !tel || !servicoSelecionado || !horarioSelecionado) {
-        mostrarBanner("Preencha tudo!");
+        mostrarBanner("⚠️ Preencha tudo!");
         return;
     }
 
     if (ocupados.includes(horarioSelecionado)) {
-        mostrarBanner("Horário já ocupado!");
+        mostrarBanner("❌ Horário já ocupado!");
         return;
     }
 
@@ -133,21 +133,35 @@ document.getElementById("agendar").onclick = async () => {
         status: "pendente"
     });
 
-    // 💖 MENSAGEM BONITA (FUNCIONANDO)
+    // 💖 mensagem
     const msg = encodeURIComponent(
-        "💖 NOVO AGENDAMENTO%0A%0A" +
-        "👩 Cliente: " + nome + "%0A" +
-        "📞 Telefone: " + tel + "%0A%0A" +
-        "📅 Data: " + data + "%0A" +
-        "⏰ Hora: " + horarioSelecionado + "%0A" +
-        " Serviço: " + servicoSelecionado.nome + "%0A" +
-        " Valor: R$" + servicoSelecionado.preco + "%0A%0A" +
-        "✨ Agendado pelo sistema"
+        `💖 NOVO AGENDAMENTO
+
+👩 Cliente: ${nome}
+📞 Telefone: ${tel}
+
+📅 Data: ${data}
+⏰ Hora: ${horarioSelecionado}
+💅 Serviço: ${servicoSelecionado.nome}
+💰 Valor: R$${servicoSelecionado.preco}
+
+✨ Agendado pelo sistema!`
     );
 
-    const link = `https://wa.me/${numeroDono}?text=${msg}`;
+    const isMobile = /Android|iPhone/i.test(navigator.userAgent);
 
-    window.open(link, "_blank");
+    let link;
+
+    if (isMobile) {
+        // 📱 abre direto no app
+        link = `whatsapp://send?phone=${numeroDono}&text=${msg}`;
+    } else {
+        // 💻 abre no navegador
+        link = `https://wa.me/${numeroDono}?text=${msg}`;
+    }
+
+    // redireciona
+    window.location.href = link;
 
     mostrarBanner("💖 Agendamento enviado!");
 
