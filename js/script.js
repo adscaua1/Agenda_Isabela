@@ -20,19 +20,22 @@ let horarioSelecionado = null;
 let servicoSelecionado = null;
 let ocupados = [];
 
+// 🔥 SEU NÚMERO FIXO (IMPORTANTE)
+const numeroDono = "5512988070269";
+
 // inputs
 const nomeInput = document.getElementById("nome");
 const telInput = document.getElementById("telefone");
 
-// 📦 salvar dados cliente
+// salvar cliente
 nomeInput.value = localStorage.getItem("nome") || "";
 telInput.value = localStorage.getItem("tel") || "";
 
-// 📅 hoje
+// data hoje
 const hoje = new Date().toISOString().split("T")[0];
 document.getElementById("data").value = hoje;
 
-// 🔥 BANNER
+// banner
 function mostrarBanner(msg) {
     const banner = document.getElementById("banner");
     banner.textContent = msg;
@@ -46,15 +49,20 @@ function mostrarBanner(msg) {
 // selecionar serviço
 document.querySelectorAll(".card-servico").forEach(card => {
     card.onclick = () => {
+
         document.querySelectorAll(".card-servico")
             .forEach(c => c.classList.remove("ativo"));
 
         card.classList.add("ativo");
-        servicoSelecionado = card.dataset.servico;
+
+        servicoSelecionado = {
+            nome: card.dataset.servico,
+            preco: card.dataset.preco
+        };
     };
 });
 
-// 🔎 buscar horários ocupados
+// buscar ocupados
 async function buscar(data) {
     const q = query(collection(db, "agendamentos"), where("data", "==", data));
     const snap = await getDocs(q);
@@ -63,7 +71,7 @@ async function buscar(data) {
     snap.forEach(doc => ocupados.push(doc.data().hora));
 }
 
-// 🎯 render horários
+// render horários
 async function renderizar(data) {
     const div = document.getElementById("horarios");
     div.innerHTML = "⏳";
@@ -95,7 +103,7 @@ async function renderizar(data) {
     });
 }
 
-// 🔥 AGENDAR
+// 🔥 AGENDAR (ENVIA PRA VOCÊ)
 document.getElementById("agendar").onclick = async () => {
     const nome = nomeInput.value;
     const tel = telInput.value;
@@ -106,7 +114,13 @@ document.getElementById("agendar").onclick = async () => {
         return;
     }
 
-    // salvar dados
+    // evitar duplicado
+    if (ocupados.includes(horarioSelecionado)) {
+        mostrarBanner("Horário já ocupado!");
+        return;
+    }
+
+    // salvar cliente
     localStorage.setItem("nome", nome);
     localStorage.setItem("tel", tel);
 
@@ -115,17 +129,38 @@ document.getElementById("agendar").onclick = async () => {
         telefone: tel,
         data,
         hora: horarioSelecionado,
-        servico: servicoSelecionado,
+        servico: servicoSelecionado.nome,
+        preco: servicoSelecionado.preco,
         status: "pendente"
     });
 
-    mostrarBanner("✅ Agendamento realizado!");
+    // 💖 MENSAGEM PRA VOCÊ
+    const msg = encodeURIComponent(
+        `💖 NOVO AGENDAMENTO
+
+👩 Cliente: ${nome}
+📞 Telefone: ${tel}
+
+📅 Data: ${data}
+⏰ Hora: ${horarioSelecionado}
+💅 Serviço: ${servicoSelecionado.nome}
+💰 Valor: R$${servicoSelecionado.preco}`
+    );
+
+    const link = `https://wa.me/${numeroDono}?text=${msg}`;
+
+    // abre seu WhatsApp
+    window.open(link, "_blank");
+
+    mostrarBanner("✅ Agendamento enviado!");
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     renderizar(data);
     carregarHistorico();
 };
 
-// 📋 HISTÓRICO (🔥 AGORA CORRETO)
+// HISTÓRICO
 async function carregarHistorico() {
     const div = document.getElementById("historico");
     div.innerHTML = "⏳";
@@ -158,16 +193,17 @@ async function carregarHistorico() {
         el.classList.add("card-historico");
 
         el.innerHTML = `
-      ⏰ ${item.hora} - ${item.servico}<br>
-      📅 ${item.data}
-      <button onclick="cancelar('${docSnap.id}')">Cancelar</button>
-    `;
+        ⏰ ${item.hora} - ${item.servico}<br>
+        💰 R$${item.preco}<br>
+        📅 ${item.data}
+        <button onclick="cancelar('${docSnap.id}')">Cancelar</button>
+        `;
 
         div.appendChild(el);
     });
 }
 
-// ❌ CANCELAR
+// CANCELAR
 window.cancelar = async (id) => {
     await deleteDoc(doc(db, "agendamentos", id));
 
@@ -177,7 +213,7 @@ window.cancelar = async (id) => {
     renderizar(document.getElementById("data").value);
 };
 
-// trocar data
+// mudar data
 document.getElementById("data").addEventListener("change", e => {
     renderizar(e.target.value);
 });

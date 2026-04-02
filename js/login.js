@@ -22,6 +22,7 @@ const horariosFixos = [
 let agendamentos = [];
 let selecionado = null;
 let horaSelecionada = null;
+let primeiraCarga = true;
 
 // LOGIN
 document.getElementById("entrar").onclick = () => {
@@ -36,6 +37,17 @@ document.getElementById("entrar").onclick = () => {
 const hoje = new Date().toISOString().split("T")[0];
 document.getElementById("data").value = hoje;
 
+// 🔔 ALERTA
+function mostrarAlerta(msg) {
+    const el = document.getElementById("alerta");
+    el.textContent = msg;
+    el.classList.add("show");
+
+    setTimeout(() => {
+        el.classList.remove("show");
+    }, 3000);
+}
+
 // 🔥 TEMPO REAL
 function escutarTempoReal() {
     const data = document.getElementById("data").value;
@@ -43,8 +55,16 @@ function escutarTempoReal() {
     const q = query(collection(db, "agendamentos"), where("data", "==", data));
 
     onSnapshot(q, (snap) => {
+
+        if (!primeiraCarga && snap.docChanges().length > 0) {
+            mostrarAlerta("🔔 Novo agendamento!");
+        }
+
+        primeiraCarga = false;
+
         agendamentos = [];
         snap.forEach(d => agendamentos.push({ id: d.id, ...d.data() }));
+
         renderizar();
     });
 }
@@ -54,6 +74,26 @@ function renderizar() {
     const agenda = document.getElementById("agenda");
     agenda.innerHTML = "";
 
+    // 💰 RESUMO
+    let total = 0;
+    let totalAtendimentos = 0;
+    let pendentes = 0;
+
+    agendamentos.forEach(a => {
+        if (!a.bloqueado) {
+            totalAtendimentos++;
+
+            if (a.preco) total += Number(a.preco);
+
+            if (a.status !== "confirmado") pendentes++;
+        }
+    });
+
+    document.getElementById("totalDia").textContent = "R$" + total;
+    document.getElementById("totalAgendamentos").textContent = totalAtendimentos;
+    document.getElementById("pendentes").textContent = pendentes;
+
+    // slots
     horariosFixos.forEach(hora => {
 
         const item = agendamentos.find(a => a.hora === hora);
@@ -67,6 +107,11 @@ function renderizar() {
                 div.innerHTML = `${hora} 🔒`;
             } else {
                 div.classList.add("ocupado");
+
+                if (item.status === "confirmado") {
+                    div.classList.add("confirmado");
+                }
+
                 div.innerHTML = `${hora}<br>${item.nome}`;
             }
         } else {
@@ -75,7 +120,6 @@ function renderizar() {
         }
 
         div.onclick = () => abrirModal(hora, item);
-
         agenda.appendChild(div);
     });
 }
@@ -86,12 +130,13 @@ function abrirModal(hora, item) {
     horaSelecionada = hora;
 
     document.getElementById("modal").style.display = "flex";
-
     document.getElementById("modalHora").textContent = hora;
 
     if (item) {
         document.getElementById("modalInfo").textContent =
-            item.bloqueado ? "Horário bloqueado" : `${item.nome} - ${item.servico}`;
+            item.bloqueado
+                ? "Horário bloqueado"
+                : `${item.nome} - ${item.servico} (R$${item.preco})`;
     } else {
         document.getElementById("modalInfo").textContent = "Horário livre";
     }
@@ -105,28 +150,26 @@ function abrirModal(hora, item) {
 function fecharModal() {
     document.getElementById("modal").style.display = "none";
 }
-window.fecharModal = fecharModal;
 
-// WHATS
+// WHATS CONFIRMAR
 document.getElementById("btnWhats").onclick = async () => {
     if (!selecionado || !selecionado.telefone) return;
 
     const tel = selecionado.telefone.replace(/\D/g, "");
 
     const msg = encodeURIComponent(
-        `Olá ${selecionado.nome}!
+        `Olá ${selecionado.nome}! 💖
 
-Seu horário foi confirmado 💈
-${selecionado.hora}`
+Seu horário foi confirmado ✨
+
+📅 ${selecionado.data}
+⏰ ${selecionado.hora}
+💅 ${selecionado.servico}`
     );
 
-    const isMobile = /Android|iPhone/i.test(navigator.userAgent);
+    const link = `https://wa.me/55${tel}?text=${msg}`;
 
-    const link = isMobile
-        ? `whatsapp://send?phone=55${tel}&text=${msg}`
-        : `https://wa.me/55${tel}?text=${msg}`;
-
-    window.location.href = link;
+    window.open(link, "_blank");
 
     await updateDoc(doc(db, "agendamentos", selecionado.id), {
         status: "confirmado"
@@ -143,7 +186,7 @@ document.getElementById("btnCancelar").onclick = async () => {
     fecharModal();
 };
 
-// BLOQUEAR / DESBLOQUEAR
+// BLOQUEAR
 document.getElementById("btnBloquear").onclick = async () => {
     const data = document.getElementById("data").value;
 

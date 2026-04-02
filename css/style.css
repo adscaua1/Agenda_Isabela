@@ -1,8 +1,8 @@
 body {
     margin: 0;
-    background: #0f0f0f;
-    color: white;
-    font-family: Arial;
+    background: linear-gradient(135deg, #1a1a1a, #2a1f2d);
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 .app {
@@ -13,22 +13,36 @@ body {
 
 h1 {
     text-align: center;
+    color: #ffb6c1;
+}
+
+.user {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 10px;
 }
 
 .card {
-    background: #1c1c1c;
+    background: #2a1f2d;
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 20px;
     margin-top: 10px;
+    box-shadow: 0 0 10px rgba(255, 182, 193, 0.1);
+}
+
+.destaque {
+    text-align: center;
+    color: #ffb6c1;
+    font-weight: bold;
 }
 
 input {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
-    background: #333;
+    background: #3a2a3f;
     color: white;
 }
 
@@ -37,15 +51,10 @@ button {
     padding: 15px;
     margin-top: 15px;
     border: none;
-    border-radius: 15px;
-    background: #00c853;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #ff69b4, #ff1493);
     color: white;
     font-size: 16px;
-    transition: 0.2s;
-}
-
-button:active {
-    transform: scale(0.95);
 }
 
 #servicos {
@@ -55,29 +64,15 @@ button:active {
 }
 
 .card-servico {
-    background: #222;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.card-servico img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-}
-
-.card-servico p {
+    background: #3a2a3f;
+    border-radius: 15px;
+    padding: 10px;
     text-align: center;
-}
-
-.card-servico:active {
-    transform: scale(0.95);
+    cursor: pointer;
 }
 
 .card-servico.ativo {
-    border: 2px solid #00c853;
+    border: 2px solid #ff69b4;
 }
 
 #horarios {
@@ -89,207 +84,19 @@ button:active {
 .horario {
     padding: 12px;
     text-align: center;
-    border-radius: 10px;
-    transition: 0.2s;
+    border-radius: 12px;
 }
 
 .livre {
-    background: #00c853;
+    background: #ff69b4;
 }
 
 .ocupado {
-    background: #d50000;
-}
-
-.horario:active {
-    transform: scale(0.9);
+    background: #ff4d6d;
 }
 
 .horario.ativo {
     border: 2px solid white;
-}
-
-/* modal */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-box {
-    background: #222;
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-}
-
-li {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-li button {
-    margin-top: 5px;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-.card-servico:active {
-    transform: scale(0.95);
-}
-
-.horario:active {
-    transform: scale(0.9);
-}
-
-#agenda {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.slot {
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.slot:active {
-    transform: scale(0.95);
-}
-
-.livre {
-    background: #00c853;
-}
-
-.ocupado {
-    background: #d50000;
-}
-
-.bloqueado {
-    background: #555;
-}
-
-#agenda {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.slot {
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    transition: 0.2s;
-}
-
-.slot:active {
-    transform: scale(0.95);
-}
-
-.livre {
-    background: #00c853;
-}
-
-.ocupado {
-    background: #d50000;
-}
-
-.bloqueado {
-    background: #555;
-}
-
-.acoes {
-    margin-top: 5px;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
-.acoes button {
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-}
-
-#agenda {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 10px;
-}
-
-.slot {
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    transition: 0.2s;
-}
-
-.livre {
-    background: #00c853;
-}
-
-.ocupado {
-    background: #d50000;
-}
-
-.bloqueado {
-    background: #555;
-}
-
-/* MODAL */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    background: rgba(0, 0, 0, 0.6);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-box {
-    width: 90%;
-    max-width: 400px;
-    background: #1c1c1c;
-    padding: 20px;
-    border-radius: 20px;
-}
-
-.modal-box button {
-    width: 100%;
-    margin-top: 10px;
-    padding: 15px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-}
-
-#btnWhats {
-    background: #00c853;
-}
-
-#btnCancelar {
-    background: #d50000;
-}
-
-#btnBloquear {
-    background: #555;
 }
 
 .banner {
@@ -297,7 +104,7 @@ button:active {
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #00c853;
+    background: #ff69b4;
     padding: 12px 20px;
     border-radius: 10px;
     opacity: 0;
@@ -309,7 +116,7 @@ button:active {
 }
 
 .card-historico {
-    background: #1c1c1c;
+    background: #2a1f2d;
     padding: 10px;
     border-radius: 10px;
     margin-top: 10px;
@@ -317,9 +124,91 @@ button:active {
 
 .card-historico button {
     margin-top: 5px;
+    background: #ff4d6d;
+}
+
+.card-servico img {
     width: 100%;
-    padding: 8px;
-    background: #d50000;
-    border: none;
-    border-radius: 8px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.card-servico {
+    background: #3a2a3f;
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+}
+
+.social {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.social a {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #feda75, #d62976, #962fbf);
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.social a:active {
+    transform: scale(0.95);
+}
+
+.resumo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.box {
+    background: #2a1f2d;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* resumo topo */
+.resumo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.box {
+    background: #2a1f2d;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* alerta */
+.alerta {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ff69b4;
+    padding: 15px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.alerta.show {
+    opacity: 1;
+}
+
+/* confirmado */
+.confirmado {
+    background: #9c27b0 !important;
 }
