@@ -20,7 +20,7 @@ let horarioSelecionado = null;
 let servicoSelecionado = null;
 let ocupados = [];
 
-// 💖 SEU NÚMERO (SEM ESPAÇO / SEM TRAÇO)
+// 💖 SEU NÚMERO
 const numeroDono = "5512988070269";
 
 // inputs
@@ -103,7 +103,7 @@ async function renderizar(data) {
     });
 }
 
-// 🔥 AGENDAR COM WHATSAPP DIRETO
+// 🔥 AGENDAR COM WHATSAPP PROFISSIONAL
 document.getElementById("agendar").onclick = async () => {
     const nome = nomeInput.value;
     const tel = telInput.value;
@@ -148,20 +148,17 @@ document.getElementById("agendar").onclick = async () => {
 ✨ Agendado pelo sistema!`
     );
 
-    const isMobile = /Android|iPhone/i.test(navigator.userAgent);
+    // 🔥 LINKS (APP + FALLBACK)
+    const linkApp = `whatsapp://send?phone=${numeroDono}&text=${msg}`;
+    const linkWeb = `https://wa.me/${numeroDono}?text=${msg}`;
 
-    let link;
+    // tenta abrir app
+    window.location.href = linkApp;
 
-    if (isMobile) {
-        // 📱 abre direto no app
-        link = `whatsapp://send?phone=${numeroDono}&text=${msg}`;
-    } else {
-        // 💻 abre no navegador
-        link = `https://wa.me/${numeroDono}?text=${msg}`;
-    }
-
-    // redireciona
-    window.location.href = link;
+    // fallback automático
+    setTimeout(() => {
+        window.location.href = linkWeb;
+    }, 1500);
 
     mostrarBanner("💖 Agendamento enviado!");
 
